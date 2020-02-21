@@ -1,0 +1,99 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/14/20 22:37:48
+AddTwo.asm						     Page 1 - 1
+
+
+				; AddTwo.asm - adds two 32-bit integers.
+				; Lab 5, Exercise 1
+				; EAX = Xval + (Yval - Zval): Xval = signed 26d, Yval = 30d, Zval = 40d
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 0000001A		Xval SDWORD 26d								; 32-bit signed 26d
+ 00000004 0000001E		Yval DWORD 30d								; 32-bit unsigned 30d
+ 00000008 00000028		Zval DWORD 40d								; 32-bit unsigned 40d
+ 0000000C 00000000		result DWORD ?
+
+
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  A1 00000004 R	mov eax, Yval								; move 30 to the register eax(32-bit)
+				;0X1E
+
+ 00000005  2B 05 00000008 R	sub eax, Zval								; subtract the contents of register Zval from Yval; 30-40 = -10
+				; FF FF FF F6  => FF because of signed Zval
+				; (Yval - Zval )
+				; 1Eh - 28h ==> F6
+				;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				; 1) Subtract 28 from FF
+				;							FF
+				;						-	28
+				;						----------
+				;							D7
+				; 2) Add 1
+				;							D7
+				;						+	01
+				;						----------
+				;							D8
+				; 3) add the two operants
+				;							1E
+				;						+	D8
+				;						-----------
+				;							F6 -----> -10d
+				;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 0000000B  03 05 00000000 R	add eax, Xval                               ; 00 00 00 10h (-10d + 26d = 16d)
+ 00000011  83 C0 10		add eax, 10h                                ; 00 00 00 20h (16d + 16d = 32d) 
+ 00000014  A3 0000000C R	mov result, eax
+
+					invoke ExitProcess,0
+ 00000019  6A 00	   *	    push   +000000000h
+ 0000001B  E8 00000000 E   *	    call   ExitProcess
+ 00000020			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/14/20 22:37:48
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000010 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000020 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000020 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+Xval . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+Yval . . . . . . . . . . . . . .	DWord	 00000004 _DATA	
+Zval . . . . . . . . . . . . . .	DWord	 00000008 _DATA	
+result . . . . . . . . . . . . .	DWord	 0000000C _DATA	
+
+	   0 Warnings
+	   0 Errors

@@ -1,0 +1,82 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/14/20 18:34:26
+AddTwo.asm						     Page 1 - 1
+
+
+				; AddTwo.asm - adds two 32-bit integers.
+				; Lab 5, Exercise 2
+				;Creating a list using DUP() operator and using offset to access the its contents for simple arithmatic
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000  00000001 [		list WORD 1 DUP(2,4,8,10,12,14)
+	    0002 0004
+	    0008 000A
+	    000C 000E
+	   ]
+
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  66| B8 0002		mov ax, 2
+ 00000004  66| 03 05		add ax, list[2]
+	   00000002 R
+ 0000000B  66| 03 05		add ax, list[4]
+	   00000004 R
+ 00000012  66| 03 05		add ax, list[6]
+	   00000006 R
+ 00000019  66| 03 05		add ax, list[8]
+	   00000008 R
+ 00000020  66| 03 05		add ax, list[10]
+	   0000000A R
+ 00000027  66| A3		mov list[10], ax 
+	   0000000A R
+
+					invoke ExitProcess,0
+ 0000002D  6A 00	   *	    push   +000000000h
+ 0000002F  E8 00000000 E   *	    call   ExitProcess
+ 00000034			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/14/20 18:34:26
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000000C DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000034 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000034 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+list . . . . . . . . . . . . . .	Word	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors

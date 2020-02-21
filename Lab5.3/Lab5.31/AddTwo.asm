@@ -1,5 +1,5 @@
 ; AddTwo.asm - adds two 32-bit integers.
-; Chapter 3 example
+; Lab 5, Exercise3
 
 .386
 .model flat,stdcall
