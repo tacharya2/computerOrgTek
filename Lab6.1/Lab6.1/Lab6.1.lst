@@ -1,0 +1,90 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/17/20 23:42:17
+AddTwo.asm						     Page 1 - 1
+
+
+				; ; Calculating the size of string; a chatacter in ASCII is a BYTE long in storage
+				; We initialized a 32-bit registers to make sure the program has enough memory to adjust enough size of string.
+				;Lab6, Exercise 1
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 54 68 69 73 20	myString BYTE "This is a very long string made by your instructor to test how $ works in this lab hope you will like it"
+	   69 73 20 61 20
+	   76 65 72 79 20
+	   6C 6F 6E 67 20
+	   73 74 72 69 6E
+	   67 20 6D 61 64
+	   65 20 62 79 20
+	   79 6F 75 72 20
+	   69 6E 73 74 72
+	   75 63 74 6F 72
+	   20 74 6F 20 74
+	   65 73 74 20 68
+	   6F 77 20 24 20
+	   77 6F 72 6B 73
+	   20 69 6E 20 74
+	   68 69 73 20 6C
+	   61 62 20 68 6F
+	   70 65 20 79 6F
+	   75 20 77 69 6C
+	   6C 20 6C 69 6B
+	   65 20 69 74
+ 00000068 = 00000068		myString_length = ($-myString)
+
+ 00000000			.code
+ 00000000			main proc
+ 00000000  B8 00000000			mov eax, 0
+ 00000005  B0 68			mov al, myString_length		; Noted that the value of AL is is 68h which is 104d that is what word processor's character-count with white spaces
+ 00000007  B0 68			mov al, myString_length
+
+				invoke ExitProcess,0
+ 00000009  6A 00	   *	    push   +000000000h
+ 0000000B  E8 00000000 E   *	    call   ExitProcess
+ 00000010			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/17/20 23:42:17
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000068 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000010 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000010 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+myString_length  . . . . . . . .	Number	 00000068h   
+myString . . . . . . . . . . . .	Byte	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors
