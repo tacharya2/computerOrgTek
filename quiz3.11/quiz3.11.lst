@@ -1,0 +1,80 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/21/20 21:44:22
+AddTwo.asm						     Page 1 - 1
+
+
+				; Quiz 3
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 78			oneByte BYTE 78h
+ 00000001 1234			oneWord WORD 1234h
+ 00000003 12345678		oneDWORD DWORD 12345678h
+
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  B8 00000000		mov eax, 0			; this will reserve a 32-bit memory with no value
+ 00000005  A0 00000000 R	mov al, oneByte		; al = 78h			?0111	1000? 
+									;					|1		|1		|
+ 0000000A  66| A1		mov ax, oneWord		; ax = 1234h		?0001	0010	0011	0100?
+	   00000001 R
+									;					|1		|1		|1		|1
+									;					|	2		|	|	  2		|
+ 00000010  A1 00000003 R	mov eax, oneDword	; eax = 12345678h	?0001	0010	0011	0100	0101	0110	0111	1000?
+									;					|1		|1		|1		|1		|1		|1		|1		|1
+									;					|           4				|				4				|
+ 00000015  66| B8 0000		mov ax, 0
+
+
+
+					invoke ExitProcess,0
+ 00000019  6A 00	   *	    push   +000000000h
+ 0000001B  E8 00000000 E   *	    call   ExitProcess
+ 00000020			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/21/20 21:44:22
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000007 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000020 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000020 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+oneByte  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+oneDWORD . . . . . . . . . . . .	DWord	 00000003 _DATA	
+oneWord  . . . . . . . . . . . .	Word	 00000001 _DATA	
+
+	   0 Warnings
+	   0 Errors
