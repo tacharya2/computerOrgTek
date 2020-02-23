@@ -1,0 +1,85 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 14:22:20
+AddTwo.asm						     Page 1 - 1
+
+
+				;Learn exchanging
+				;================================REMEMBER===============================
+				;===============XCHG register, register=================================
+				;===============XCHG register, memory===================================
+				;===============XCHG memory, register===================================
+
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 00000001		array DWORD 1, 2, 3		; memory ==> 01 00 00 00 02 00 00 00 03 00 00 00 00 @ 0x0040400
+	   00000002
+	   00000003
+
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  B8 00000000		mov eax, 0h				; eax = 00000000
+ 00000005  BB 00000000		mov ebx, 0h				; ebx = 00000000
+ 0000000A  A1 00000000 R	mov eax, array			; eax = 00000001	[array+4] = 02 00 00 00
+ 0000000F  87 05 00000004 R	xchg eax, [array+4]		; eax = 00000002	[array+4] = 01 00 00 00
+ 00000015  87 05 00000008 R	xchg eax, [array+8]		; eax = 00000003 <-- register	[array+8] = 02 00 00 00 <-- memory
+ 0000001B  87 05 00000000 R	xchg array, eax			; array = 03 00 00 00
+				;==========================================What's in the array now? look backwards in the above execution =======================
+				; array 03 00 00 00 02 00 00 00 01 00 00 00
+				;==========================================What was the intention? 3, 1, 2=======================================================
+				;==========================================How do you fix it?====================================================================
+				;===========================================Remove the last line and add the following
+				;mov eax, array			; eax = 00000001	[array+4] = 02 00 00 00
+				;xchg eax, [array+4]		; eax = 00000002	[array+4] = 01 00 00 00
+				;xchg eax, [array+8]		; eax = 00000003 <-- register	[array+8] = 02 00 00 00 <-- memory
+				;xchg eax, [array+4]		; eax = 00000001	[array+4] = 03 00 00 00 
+
+					invoke ExitProcess,0
+ 00000021  6A 00	   *	    push   +000000000h
+ 00000023  E8 00000000 E   *	    call   ExitProcess
+ 00000028			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 14:22:20
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000000C DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000028 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000028 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+array  . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors

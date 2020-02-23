@@ -1,0 +1,72 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 22:40:34
+AddTwo.asm						     Page 1 - 1
+
+
+				; mov and xchg: rearrange the values to be 3,1,2, you could
+				; Lab 6
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 1000 2000 3000	wordList WORD 1000h, 2000h, 3000h			; very important property discovered
+
+ 00000000			.code
+ 00000000			main proc
+ 00000000  BE 00000000 R	mov esi, OFFSET wordList
+ 00000005  66| 8B 06		mov ax, [esi] ;<------ this will return the value of the pointer that esi address is pointing to
+ 00000008  83 C6 02		add esi, 2     ;<---------increment the word by 1
+ 0000000B  66| 03 06		add ax, [esi]  ;<--------add ax with [esi]
+ 0000000E  83 C6 02		add esi, 2		;
+ 00000011  66| 03 06		add ax, [esi]	;
+ 00000014  66| A3		mov wordList, ax
+	   00000000 R
+
+					invoke ExitProcess,0
+ 0000001A  6A 00	   *	    push   +000000000h
+ 0000001C  E8 00000000 E   *	    call   ExitProcess
+ 00000021			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 22:40:34
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000006 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000021 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000021 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+wordList . . . . . . . . . . . .	Word	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors

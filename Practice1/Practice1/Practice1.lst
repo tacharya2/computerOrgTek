@@ -1,0 +1,85 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 09:16:12
+AddTwo.asm						     Page 1 - 1
+
+
+				; Copying smaller values into larger ones
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 0001			count word 1				; 0000	0000	0000	0001
+ 00000002 FFF0			signedVal SWORD -16			; ??1111	1111	1111	0000?	FF F0?. 
+ 00000004 8F			Val1 BYTE 10001111b
+
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  B9 00000000		mov ecx, 0					; 0000	0000	0000	0000
+ 00000005  66| 8B 0D		mov cx, count				; xxxx	xxxx	0000	0001. Here, we copied only the cx; 8-bit portion leaving the rest empty
+	   00000000 R
+
+				;==============================================================================================================
+				; Trying same approach with the signed integer
+ 0000000C  B9 00000000		mov ecx, 0					; 0000	0000	0000	0000
+ 00000011  66| 8B 0D		mov cx, signedVal			; 0000	0000	1111	0000?	i.e. ECX= 00 00 FF FF FF F0 (+65,520)-which is absurd
+	   00000002 R
+				;===============================================================================================================
+				;To correct this'
+ 00000018  B9 FFFFFFFF		mov ecx, 0ffffffffh
+ 0000001D  66| 8B 0D		mov cx, signedVal
+	   00000002 R
+				;=======================================MOVSX==================================================================
+ 00000024  0F BE 05		movsx eax, Val1
+	   00000004 R
+
+
+					invoke ExitProcess,0
+ 0000002B  6A 00	   *	    push   +000000000h
+ 0000002D  E8 00000000 E   *	    call   ExitProcess
+ 00000032			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 09:16:12
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000005 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000032 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000032 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+Val1 . . . . . . . . . . . . . .	Byte	 00000004 _DATA	
+count  . . . . . . . . . . . . .	Word	 00000000 _DATA	
+signedVal  . . . . . . . . . . .	Word	 00000002 _DATA	
+
+	   0 Warnings
+	   0 Errors

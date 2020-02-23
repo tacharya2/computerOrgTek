@@ -1,0 +1,96 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 16:11:35
+AddTwo.asm						     Page 1 - 1
+
+
+				; mov and xchg: rearrange the values to be 3,1,2, you could
+				; Lab 6
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 1000			val1 WORD 1000h
+ 00000002 2000			val2 WORD 2000h
+ 00000004 10 20 30 40 50	arrayB BYTE 10h, 20h, 30h, 40h, 50h
+ 00000009 0100 0200 0300	arrayW WORD 100h, 200h, 300h
+ 0000000F 00010000		arrayD DWORD 10000h, 20000h
+	   00020000
+					
+ 00000000			.code
+ 00000000			main proc
+				;Demonstrating MOVZX instructions==========Important thing to note is that, movzx source must be maller to that of the estination
+ 00000000  66| BB A69B		mov bx, 0A69Bh						;bx = A69Bh
+ 00000004  0F B7 C3		movzx eax, bx						;0000A69Bh
+ 00000007  0F B6 D3		movzx edx, bl						;0000009Bh
+ 0000000A  66| 0F B6 CB		movzx cx, bl						;009Bh
+				;===================================================I mastered this concept=================================
+				;
+				;Demonstrating MOVSX instructions=========Important thing is that, movsx source must be smaller to that of it destination
+ 0000000E  66| BB A69B		mov bx, 0A69Bh						;bx = A69Bh
+ 00000012  0F BF C3		movsx eax, bx						;eax = FFFFA69Bh  
+ 00000015  0F BE D3		movsx edx, bl						;edx = FFFFFF9Bh
+ 00000018  B3 7B		mov bl, 7Bh							;bl = 7B
+ 0000001A  66| 0F BE CB		movsx cx, bl						;cx = 007B ; interestingly this time it is positive, but WHY?
+													; since immediate is condiser a signed integer, movsx instruction converted it to positive?
+				;
+				;memory-to-memory exchange; smart way of exchaninging the values between the memory.
+ 0000001E  66| A1		mov ax, val1						; AX = 1000h
+	   00000000 R
+ 00000024  66| 87 05		xchg ax, val2						; AX = 2000h
+	   00000002 R
+ 0000002B  66| A3		mov val1, ax						; val1 = 2000h
+	   00000000 R
+
+					
+					invoke ExitProcess,0
+ 00000031  6A 00	   *	    push   +000000000h
+ 00000033  E8 00000000 E   *	    call   ExitProcess
+ 00000038			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 16:11:35
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000017 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000038 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000038 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+arrayB . . . . . . . . . . . . .	Byte	 00000004 _DATA	
+arrayD . . . . . . . . . . . . .	DWord	 0000000F _DATA	
+arrayW . . . . . . . . . . . . .	Word	 00000009 _DATA	
+val1 . . . . . . . . . . . . . .	Word	 00000000 _DATA	
+val2 . . . . . . . . . . . . . .	Word	 00000002 _DATA	
+
+	   0 Warnings
+	   0 Errors

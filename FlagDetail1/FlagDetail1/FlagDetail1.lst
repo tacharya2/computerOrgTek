@@ -1,0 +1,69 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 16:25:03
+AddTwo.asm						     Page 1 - 1
+
+
+				; mov and xchg: rearrange the values to be 3,1,2, you could
+				; Lab 6
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 1000			myWord WORD 1000h	;WORD Capa:  0000 0000 0000 0000
+ 00000000			.code
+ 00000000			main proc
+ 00000000  66| FF 05		inc myWord				; myWord = 00001001h
+	   00000000 R
+ 00000007  66| 8B 1D		mov bx, myWord			; bx = 1001
+	   00000000 R
+ 0000000E  66| 4B		dec bx					; bx = 1000h
+
+					
+					invoke ExitProcess,0
+ 00000010  6A 00	   *	    push   +000000000h
+ 00000012  E8 00000000 E   *	    call   ExitProcess
+ 00000017			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/22/20 16:25:03
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000002 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000017 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000017 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+myWord . . . . . . . . . . . . .	Word	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors
