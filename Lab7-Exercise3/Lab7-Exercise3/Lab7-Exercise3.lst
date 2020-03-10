@@ -1,0 +1,82 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/28/20 09:42:37
+AddTwo.asm						     Page 1 - 1
+
+
+				;Lab7-Exercise 1
+				;Learn Flags Detail
+
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+ 00000000			.data
+ 00000000 10 20 30 40		myBytes BYTE 10h, 20h, 30h, 40h
+ 00000004 008A 003B 0072	myWords WORD 8Ah, 3Bh, 72h, 44h, 66h
+	   0044 0066
+ 0000000E 00000001		myDoubles  DWORD 1, 2, 3, 4, 5
+	   00000002
+	   00000003
+	   00000004
+	   00000005
+ 00000022 0000000E R		myPointer DWORD myDoubles
+ 00000000			.code
+ 00000000			main PROC
+ 00000000  BE 00000000 R	mov esi,OFFSET myBytes
+ 00000005  66| 8B 06		mov ax, [esi]								; a. AX = 2010h
+ 00000008  8B 35 00000022 R	mov esi, myPointer							; b. What is the difference between this memory access mode and direct offset operand
+															; Answer: this memory access mode use address of the value instead of the value byself
+ 0000000E  66| 8B 46 06		mov ax, [esi+6]								; c. AX = 0000h				
+ 00000012  BE 00000004 R	mov esi, OFFSET myWords
+ 00000017  8B 46 02		mov eax, [esi+2]							; e. EAX = 003B
+ 0000001A  66| 89 06		mov [esi], ax							    ; uncomment the unstruction. Why this would not work?
+															; Answer: This works and the value is 
+					invoke ExitProcess,0
+ 0000001D  6A 00	   *	    push   +000000000h
+ 0000001F  E8 00000000 E   *	    call   ExitProcess
+ 00000024			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    02/28/20 09:42:37
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000026 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000024 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000024 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+myBytes  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+myDoubles  . . . . . . . . . . .	DWord	 0000000E _DATA	
+myPointer  . . . . . . . . . . .	DWord	 00000022 _DATA	
+myWords  . . . . . . . . . . . .	Word	 00000004 _DATA	
+
+	   0 Warnings
+	   0 Errors
