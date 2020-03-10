@@ -1,0 +1,81 @@
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    03/09/20 19:41:40
+AddTwo.asm						     Page 1 - 1
+
+
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess proto,dwExitCode:dword
+
+ 00000000			.data
+ 00000000 10 20 30 40		myBytes BYTE 10h, 20h, 30h, 40h
+ 00000004 008A 003B 0072	myWords WORD 8Ah, 3Bh, 72h, 44h, 66h
+	   0044 0066
+ 0000000E 00000001		myDoubles DWORD 1, 2, 3, 4, 5
+	   00000002
+	   00000003
+	   00000004
+	   00000005
+ 00000022 0000000E R		myPointer DWORD myDoubles
+ 00000000			.code
+ 00000000			main proc
+ 00000000  BE 00000000 R	mov esi, OFFSET myBYtes
+ 00000005  8A 06		mov al, [esi]					; AL = 10h
+ 00000007  8A 46 03		mov al, [esi+3]					; AL = 40h
+ 0000000A  BE 00000006 R	mov esi, OFFSET myWords+2
+ 0000000F  66| 8B 06		mov ax, [esi]					; AX = 00 3Bh
+ 00000012  BF 00000008		mov edi, 8
+ 00000017  8B 97 0000000E R	mov edx, [myDoubles + edi]		; EDX = 00 00 00 03
+ 0000001D  8B 97 0000000E R	mov edx, myDoubles[edi]			; EDX = 00 00 00 03
+ 00000023  8B 1D 00000022 R	mov ebx, myPointer
+ 00000029  8B 43 04		mov eax, [ebx + 4]				; EAX = 00 00 00 02
+
+				invoke ExitProcess,0
+ 0000002C  6A 00	   *	    push   +000000000h
+ 0000002E  E8 00000000 E   *	    call   ExitProcess
+ 00000033			main endp
+				end main
+Microsoft (R) Macro Assembler Version 14.16.27035.0	    03/09/20 19:41:40
+AddTwo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000026 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000033 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000033 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+myBytes  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+myDoubles  . . . . . . . . . . .	DWord	 0000000E _DATA	
+myPointer  . . . . . . . . . . .	DWord	 00000022 _DATA	
+myWords  . . . . . . . . . . . .	Word	 00000004 _DATA	
+
+	   0 Warnings
+	   0 Errors

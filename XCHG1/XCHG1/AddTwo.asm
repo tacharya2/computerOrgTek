@@ -19,6 +19,7 @@ main PROC
 ;xchg val, val2 --> No memory to memory exchange
 xchg eax, val2
 xchg val2, eax
+mov val, eax
 
 	invoke ExitProcess,0
 main endp
